@@ -8,6 +8,7 @@ git submodule init && git submodule update
 export KERNEL_ROOT="$(pwd)"
 export ARCH=arm64
 export KBUILD_BUILD_USER="@ravindu644"
+export PLATFORM_VERSION=13
 
 # Install the requirements for building the kernel when running the script for the first time
 if [ ! -f ".requirements" ]; then
@@ -18,7 +19,7 @@ if [ ! -f ".requirements" ]; then
 fi
 
 # Create necessary directories
-mkdir -p "${KERNEL_ROOT}/out" "${KERNEL_ROOT}/build" "${HOME}/toolchains"
+mkdir -p "${KERNEL_ROOT}/build" "${HOME}/toolchains"
 
 # init clang-r353983c
 if [ ! -d "${HOME}/toolchains/clang-r353983c" ]; then
@@ -48,8 +49,6 @@ export BUILD_CC="${HOME}/toolchains/clang-r353983c/bin/clang"
 
 # Build options for the kernel
 export BUILD_OPTIONS="
--C ${KERNEL_ROOT} \
-O=${KERNEL_ROOT}/out \
 -j$(nproc) \
 ARCH=arm64 \
 CROSS_COMPILE=${BUILD_CROSS_COMPILE} \
@@ -60,7 +59,7 @@ CLANG_TRIPLE=aarch64-linux-gnu- \
 build_kernel(){
     # Make default configuration.
     # Replace 'your_defconfig' with the name of your kernel's defconfig
-    make ${BUILD_OPTIONS} your_defconfig
+    make ${BUILD_OPTIONS} exynos850-a13xx_defconfig
 
     # Configure the kernel (GUI)
     make ${BUILD_OPTIONS} menuconfig
@@ -69,7 +68,7 @@ build_kernel(){
     make ${BUILD_OPTIONS} Image || exit 1
 
     # Copy the built kernel to the build directory
-    cp "${KERNEL_ROOT}/out/arch/arm64/boot/Image" "${KERNEL_ROOT}/build"
+    cp "${KERNEL_ROOT}/arch/arm64/boot/Image" "${KERNEL_ROOT}/build"
 
     echo -e "\n[INFO]: BUILD FINISHED..!"
 }
