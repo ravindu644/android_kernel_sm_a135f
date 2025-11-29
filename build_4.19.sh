@@ -53,4 +53,23 @@ build_kernel(){
 
     echo -e "\n[INFO]: BUILD FINISHED..!"
 }
-build_kernel
+
+build_boot_img(){
+    set -e
+
+    cd "${KERNEL_ROOT}/prebuilts_a135f" && git clean -xfd
+
+    # unpacking the boot.img
+    ./magiskboot unpack boot.img && \
+        cp "${KERNEL_ROOT}/build/Image" "${KERNEL_ROOT}/prebuilts_a135f/kernel"
+    
+    # repacking the boot.img
+    ./magiskboot repack boot.img && \
+        mv new-boot.img "${KERNEL_ROOT}/build/boot.img"
+
+    echo -e "\n[INFO]: BOOT IMG BUILD FINISHED..!"
+    set +e
+}
+
+build_kernel || exit 1
+build_boot_img
