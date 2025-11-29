@@ -40,7 +40,7 @@ CLANG_TRIPLE=aarch64-linux-gnu- \
 build_kernel(){
     # Make default configuration.
     # Replace 'your_defconfig' with the name of your kernel's defconfig
-    make ${BUILD_OPTIONS} exynos850-a13xx_defconfig custom.config
+    make ${BUILD_OPTIONS} exynos850-a13xx_defconfig custom.config ubuntu.config
 
     # Configure the kernel (GUI)
     make ${BUILD_OPTIONS} menuconfig
