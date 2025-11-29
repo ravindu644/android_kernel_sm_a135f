@@ -71,5 +71,19 @@ build_boot_img(){
     set +e
 }
 
+build_tar(){
+    set -e
+
+    cd "${KERNEL_ROOT}/build"
+
+    tar -cvf "KernelSU-Next-v1.1.1-Ubuntu-$(date +%Y%m%d).tar" "boot.img" && \
+        zip -9 "KernelSU-Next-v1.1.1-Ubuntu-$(date +%Y%m%d).tar.zip" "KernelSU-Next-v1.1.1-Ubuntu-$(date +%Y%m%d).tar"
+
+    echo -e "\n[INFO]: TAR BUILD FINISHED..!"
+
+    cd "${KERNEL_ROOT}"
+    set +e
+}
+
 build_kernel || exit 1
-build_boot_img
+build_boot_img && build_tar || exit 1
